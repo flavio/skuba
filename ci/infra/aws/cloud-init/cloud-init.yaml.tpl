@@ -17,6 +17,7 @@ bootcmd:
 runcmd:
 ${register_scc}
 ${register_rmt}
+${fix_aws_routing_issues_bsc1146774}
 ${commands}
   - /usr/bin/sed -i -e 's/btrfs/overlay2/g' /etc/crio/crio.conf
 

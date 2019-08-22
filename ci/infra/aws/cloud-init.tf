@@ -40,11 +40,12 @@ data "template_file" "cloud-init" {
   template = "${file("cloud-init/cloud-init.yaml.tpl")}"
 
   vars {
-    authorized_keys = "${join("\n", formatlist("  - %s", var.authorized_keys))}"
-    commands        = "${join("\n", data.template_file.commands.*.rendered)}"
-    repositories    = "${length(var.repositories) == 0 ? "\n" : join("\n", data.template_file.repositories.*.rendered)}"
-    register_scc    = "${var.caasp_registry_code != "" && var.rmt_server_name == "" ? join("\n", data.template_file.register_scc.*.rendered) : "" }"
-    register_rmt    = "${var.rmt_server_name != "" ? join("\n", data.template_file.register_rmt.*.rendered) : ""}"
+    authorized_keys                   = "${join("\n", formatlist("  - %s", var.authorized_keys))}"
+    commands                          = "${join("\n", data.template_file.commands.*.rendered)}"
+    repositories                      = "${length(var.repositories) == 0 ? "\n" : join("\n", data.template_file.repositories.*.rendered)}"
+    register_scc                      = "${var.caasp_registry_code != "" && var.rmt_server_name == "" ? join("\n", data.template_file.register_scc.*.rendered) : "" }"
+    register_rmt                      = "${var.rmt_server_name != "" ? join("\n", data.template_file.register_rmt.*.rendered) : ""}"
+    fix_aws_routing_issues_bsc1146774 = "${file("cloud-init/fix-aws-routing-issues-bsc1146774.tpl")}"
   }
 }
 
