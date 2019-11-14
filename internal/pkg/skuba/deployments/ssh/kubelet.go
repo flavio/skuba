@@ -41,8 +41,13 @@ func kubeletConfigure(t *Target, data interface{}) error {
 		if err := t.UploadFileContents("/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf", assets.KubeadmService); err != nil {
 			return err
 		}
-		if err := t.UploadFileContents("/etc/sysconfig/kubelet", assets.KubeletSysconfig); err != nil {
-			return err
+
+		const kubelet_sysconfig = "/etc/sysconfig/kubelet"
+		if contents, _ := t.DownloadFileContents(kubelet_sysconfig); contents == "" {
+			// Upload file only when it doesn't alreayd exist.
+			if err := t.UploadFileContents(kubelet_sysconfig, assets.KubeletSysconfig); err != nil {
+				return err
+			}
 		}
 	} else {
 		if err := t.UploadFileContents("/lib/systemd/system/kubelet.service", assets.KubeletService); err != nil {
