@@ -1,0 +1,56 @@
+module "<HOSTNAME>" {
+  source = "./caasp-libvirt-host"
+
+  # TODO: drop later once we get rid of the LB
+  create_lb           = false
+
+  libvirt_uri         = "qemu+ssh://root@<HOST FQDN>/system"
+  # libvirt pool to use if different from "default"
+  #pool                = "home_libvirtd"
+
+  # master nodes
+  masters             = <NUMBER OF MASTER NODES TO CREATE>
+  master_memory       = var.master_memory
+  master_vcpu         = var.master_vcpu
+
+  # worker nodes
+  workers             = <NUMBER OF WORKER NODES TO CREATE>
+  worker_memory       = var.worker_memory
+  worker_vcpu         = var.worker_vcpu
+
+  # k8s multiple-zones
+  region              = var.region
+  zone                = "<UNIQUE ID FOR THE HOST - E.G. FQDN>"
+
+  stack_name          = var.stack_name
+
+  username            = var.username
+  password            = var.password
+
+  # VMs disk/image settings
+  image_uri           = var.image_uri
+  disk_size           = var.disk_size
+
+
+  caasp_registry_code = var.caasp_registry_code
+  rmt_server_name     = var.rmt_server_name
+  repositories        = var.repositories
+  packages            = var.packages
+
+  ntp_servers         = var.ntp_servers
+  authorized_keys     = var.authorized_keys
+
+  # Network settings
+  dns_domain          = var.dns_domain
+  network_mode        = var.network_mode
+  # CIDR for the VMs running on this host
+  network_cidr        = "CIDR"
+}
+
+output "<HOST>_master_nodes" {
+  value = module.<HOST NAME>.ip_masters
+}
+
+output "<HOST>_worker_nodes" {
+  value = module.<HOSTNAME>.ip_workers
+}
